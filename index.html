@@ -187,6 +187,12 @@
         justify-content: space-between;
       }
 
+      .card-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .platform-mark,
       .offer {
         display: inline-flex;
@@ -225,6 +231,22 @@
         font-weight: 800;
         letter-spacing: .04em;
         text-transform: uppercase;
+      }
+
+      .onlyfans-badge {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,.24);
+        border-radius: 50%;
+        color: #fff;
+        background: rgba(8,9,11,.72);
+        box-shadow: 0 8px 18px rgba(0,0,0,.2);
+        font-size: .63rem;
+        font-weight: 900;
+        letter-spacing: -.06em;
+        line-height: 1;
       }
 
       .card-copy {
@@ -378,7 +400,10 @@
               <span class="mark-icon" aria-hidden="true">✦</span>
               Private
             </span>
-            <span class="offer">Join me</span>
+            <span class="card-actions">
+              <span class="offer">Join me</span>
+              <span class="onlyfans-badge" aria-label="OnlyFans">OF</span>
+            </span>
           </div>
           <div class="card-copy">
             <p class="card-kicker">Exclusive access</p>
