@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#08090b" />
+    <meta name="description" content="Private updates and direct access." />
+    <title>Private with me</title>
+    <link rel="preload" href="assets/hero.jpg" as="image" fetchpriority="high" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2308090b'/%3E%3Cpath d='M32 50S10 38 10 23c0-10 13-15 22-5 9-10 22-5 22 5 0 15-22 27-22 27Z' fill='%23f2c08d'/%3E%3C/svg%3E" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f7f4ef;
+        --muted: rgba(247, 244, 239, 0.68);
+        --line: rgba(255, 255, 255, 0.13);
+        --night: #08090b;
+        --gold: #f2c08d;
+        --gold-light: #ffe4c6;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { background: #050506; }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 50% 18%, rgba(242, 192, 141, 0.13), transparent 34rem),
+          #050506;
+        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      .page {
+        position: relative;
+        width: min(100%, 580px);
+        min-height: 100vh;
+        margin: 0 auto;
+        overflow: hidden;
+        background: var(--night);
+        box-shadow: 0 0 80px rgba(0, 0, 0, 0.75);
+      }
+
+      .hero {
+        position: relative;
+        min-height: clamp(500px, 84svh, 680px);
+        isolation: isolate;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(180deg, rgba(0,0,0,.03) 30%, rgba(8,9,11,.20) 54%, #08090b 95%),
+          url("assets/hero.jpg") center 37% / cover no-repeat;
+        transform: scale(1.015);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        z-index: -1;
+        height: 48%;
+        background: linear-gradient(180deg, transparent, rgba(8,9,11,.88) 58%, #08090b 100%);
+      }
+
+      .topbar {
+        position: absolute;
+        top: max(14px, env(safe-area-inset-top));
+        left: 16px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 3;
+      }
+
+      .age-pill,
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid rgba(255,255,255,.20);
+        border-radius: 999px;
+        background: rgba(8,9,11,.44);
+        box-shadow: 0 8px 24px rgba(0,0,0,.18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .live-pill { color: rgba(255,255,255,.90); }
+
+      .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #54d58a;
+        box-shadow: 0 0 0 4px rgba(84,213,138,.14);
+      }
+
+      .identity {
+        position: absolute;
+        left: 24px;
+        right: 24px;
+        bottom: 72px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 7px;
+        color: var(--gold-light);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.05rem, 4vw, 1.25rem);
+        font-style: italic;
+      }
+
+      h1 {
+        max-width: 480px;
+        margin: 0 auto;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 10vw, 4.1rem);
+        font-weight: 500;
+        line-height: .96;
+        letter-spacing: -.045em;
+        text-shadow: 0 4px 28px rgba(0,0,0,.55);
+      }
+
+      .subline {
+        margin: 13px 0 0;
+        color: rgba(255,255,255,.78);
+        font-size: .96rem;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+        margin-top: -50px;
+        padding: 0 16px calc(30px + env(safe-area-inset-bottom));
+      }
+
+      .primary-card {
+        position: relative;
+        display: block;
+        min-height: 320px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.21);
+        border-radius: 24px;
+        background: #17171a;
+        box-shadow: 0 22px 60px rgba(0,0,0,.48);
+        transform: translateZ(0);
+      }
+
+      .primary-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(0,0,0,.03) 20%, rgba(0,0,0,.19) 52%, rgba(5,5,7,.94) 100%),
+          url("assets/card.jpg") center 41% / cover no-repeat;
+        transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+      }
+
+      .primary-card:hover::before { transform: scale(1.025); }
+      .primary-card:active { transform: scale(.985); }
+
+      .card-top {
+        position: absolute;
+        inset: 16px 16px auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .platform-mark,
+      .offer {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        border-radius: 999px;
+        backdrop-filter: blur(13px);
+        -webkit-backdrop-filter: blur(13px);
+      }
+
+      .platform-mark {
+        gap: 8px;
+        padding: 0 13px 0 9px;
+        background: rgba(8,9,11,.62);
+        border: 1px solid rgba(255,255,255,.18);
+        font-size: .82rem;
+        font-weight: 700;
+      }
+
+      .mark-icon {
+        display: grid;
+        width: 23px;
+        height: 23px;
+        place-items: center;
+        border-radius: 50%;
+        color: #16100b;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      }
+
+      .offer {
+        padding: 0 12px;
+        color: #23170d;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        box-shadow: 0 7px 24px rgba(242,192,141,.28);
+        font-size: .74rem;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+      }
+
+      .card-copy {
+        position: absolute;
+        inset: auto 20px 20px;
+      }
+
+      .card-kicker {
+        margin: 0 0 5px;
+        color: var(--gold-light);
+        font-size: .75rem;
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .card-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 18px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.85rem, 7vw, 2.65rem);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -.035em;
+      }
+
+      .arrow {
+        display: grid;
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 50%;
+        color: #25170d;
+        background: var(--ink);
+        transition: transform .25s ease, background .25s ease;
+      }
+
+      .primary-card:hover .arrow { transform: translate(3px, -3px); background: var(--gold-light); }
+
+      .telegram-card {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 74px;
+        margin-top: 14px;
+        padding: 10px 13px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        color: #121316;
+        background: #fafafa;
+        box-shadow: 0 12px 32px rgba(0,0,0,.24);
+        transition: transform .2s ease, box-shadow .2s ease;
+      }
+
+      .telegram-card:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(0,0,0,.31); }
+      .telegram-card:active { transform: scale(.985); }
+
+      .telegram-icon {
+        display: grid;
+        flex: 0 0 auto;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 14px;
+        color: white;
+        background: linear-gradient(145deg, #40b7ee, #168dcc);
+        box-shadow: 0 8px 20px rgba(35,158,217,.25);
+      }
+
+      .telegram-copy { min-width: 0; flex: 1; }
+      .telegram-copy strong { display: block; font-size: 1rem; }
+      .telegram-copy span { display: block; margin-top: 2px; color: #67686c; font-size: .8rem; }
+
+      .chevron { color: #9a9b9e; }
+
+      .socials {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .social {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: 50%;
+        color: var(--ink);
+        background: rgba(255,255,255,.07);
+        transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      }
+
+      a.social:hover { transform: translateY(-3px); background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.28); }
+      footer {
+        margin-top: 22px;
+        text-align: center;
+        color: rgba(255,255,255,.44);
+        font-size: .75rem;
+        line-height: 1.6;
+      }
+
+      footer strong { color: rgba(255,255,255,.72); font-weight: 600; }
+
+      :focus-visible {
+        outline: 3px solid var(--gold-light);
+        outline-offset: 4px;
+      }
+
+      @media (max-width: 430px) {
+        .hero { min-height: min(82svh, 610px); }
+        .identity { bottom: 78px; }
+        .primary-card { min-height: 300px; }
+      }
+
+      @media (min-width: 700px) {
+        body { padding: 22px 0; }
+        .page { min-height: calc(100vh - 44px); border-radius: 28px; }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .primary-card { animation: arrive .7s .16s cubic-bezier(.2,.8,.2,1) both; }
+        .telegram-card { animation: arrive .7s .28s cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes arrive { from { opacity: 0; transform: translateY(18px); } }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" aria-label="Profile introduction">
+        <div class="topbar">
+          <span class="live-pill"><span class="live-dot" aria-hidden="true"></span>Online</span>
+          <span class="age-pill">18+</span>
+        </div>
+        <div class="identity">
+          <p class="eyebrow">A little closer…</p>
+          <h1>Private with me</h1>
+          <p class="subline">Your invitation is waiting below</p>
+        </div>
+      </section>
+
+      <section class="content" aria-label="Private links">
+        <a class="primary-card" href="https://www.stacked.com/@beatrice_lady/membership?lang=en" aria-label="Open my private membership page">
+          <div class="card-top">
+            <span class="platform-mark">
+              <span class="mark-icon" aria-hidden="true">✦</span>
+              Private
+            </span>
+            <span class="offer">Join me</span>
+          </div>
+          <div class="card-copy">
+            <p class="card-kicker">Exclusive access</p>
+            <h2 class="card-title">
+              My private page
+              <span class="arrow" aria-hidden="true">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </h2>
+          </div>
+        </a>
+
+        <a class="telegram-card" href="https://t.me/+pzE9_DxjYeYzMmM0" aria-label="Join my Telegram channel">
+          <span class="telegram-icon" aria-hidden="true">
+            <svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="m20.5 4.5-3.03 14.28c-.23 1.01-.83 1.26-1.68.78l-4.61-3.4-2.23 2.14c-.25.25-.45.45-.93.45l.33-4.69 8.53-7.71c.37-.33-.08-.52-.58-.19L5.76 12.8l-4.54-1.42c-.99-.31-1-.99.21-1.46L19.2 3.07c.82-.3 1.54.2 1.3 1.43Z" fill="currentColor"/></svg>
+          </span>
+          <span class="telegram-copy"><strong>Telegram</strong><span>Join my private channel</span></span>
+          <svg class="chevron" width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <nav class="socials" aria-label="Social profiles">
+          <a class="social" href="https://x.com/beatricekxx?s=11" aria-label="X profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.24 2H21l-6.03 6.9L22.06 22H16.5l-4.35-5.69L7.18 22H4.41l6.45-7.37L4.06 2h5.7l3.93 5.2L18.24 2Zm-.97 17.7h1.53L8.92 4.18H7.28L17.27 19.7Z"/></svg>
+          </a>
+          <a class="social" href="https://www.tiktok.com/@grazhinafa4" aria-label="TikTok profile">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.85 4.85 0 0 1 13.78 3h-2.4v12.67a2.66 2.66 0 1 1-1.83-2.53v-2.45a5.06 5.06 0 1 0 4.23 4.98V9.24a7.2 7.2 0 0 0 4.2 1.35V8.2c-.47 0-.93-.08-1.38-.23V5.82Z"/></svg>
+          </a>
+          <a class="social" href="https://t.me/+pzE9_DxjYeYzMmM0" aria-label="Telegram">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m20.5 4.5-3.03 14.28c-.23 1.01-.83 1.26-1.68.78l-4.61-3.4-2.23 2.14c-.25.25-.45.45-.93.45l.33-4.69 8.53-7.71c.37-.33-.08-.52-.58-.19L5.76 12.8l-4.54-1.42c-.99-.31-1-.99.21-1.46L19.2 3.07c.82-.3 1.54.2 1.3 1.43Z" fill="currentColor"/></svg>
+          </a>
+        </nav>
+
+        <footer><strong>Adults only · 18+</strong><br />By continuing, you confirm that you are of legal age.</footer>
+      </section>
+    </main>
+  </body>
+</html>
