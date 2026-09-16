@@ -358,6 +358,159 @@
 
       footer strong { color: rgba(255,255,255,.72); font-weight: 600; }
 
+      .browser-guide {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        padding: 104px 18px 24px;
+        visibility: hidden;
+        opacity: 0;
+        background: rgba(4,5,7,.79);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: opacity .28s ease, visibility .28s ease;
+      }
+
+      .browser-guide.is-open {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .guide-pointer {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #ff7fac;
+        pointer-events: none;
+      }
+
+      .guide-pointer span {
+        padding: 8px 13px;
+        border: 1px solid rgba(255,127,172,.42);
+        border-radius: 999px;
+        color: #ffd9e6;
+        background: rgba(89,27,49,.72);
+        box-shadow: 0 8px 26px rgba(0,0,0,.3);
+        font-size: .82rem;
+        font-weight: 800;
+        letter-spacing: .01em;
+      }
+
+      .guide-pointer svg {
+        width: 34px;
+        height: 56px;
+        overflow: visible;
+        transform-origin: 70% 10%;
+      }
+
+      .guide-dialog {
+        position: relative;
+        width: min(100%, 390px);
+        padding: 26px 22px 20px;
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 26px;
+        color: #f8f5f1;
+        background: linear-gradient(155deg, rgba(30,30,34,.98), rgba(13,14,17,.98));
+        box-shadow: 0 28px 80px rgba(0,0,0,.58), 0 0 54px rgba(242,192,141,.08);
+      }
+
+      .guide-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 50%;
+        color: rgba(255,255,255,.72);
+        background: rgba(255,255,255,.06);
+        cursor: pointer;
+      }
+
+      .guide-brand {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 16px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(242,192,141,.18), rgba(255,255,255,.05));
+        box-shadow: 0 13px 32px rgba(0,0,0,.28);
+      }
+
+      .guide-brand svg { width: 28px; height: 28px; color: var(--gold-light); }
+
+      .guide-dialog h2 {
+        margin: 0;
+        text-align: center;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.7rem;
+        font-weight: 500;
+        letter-spacing: -.025em;
+      }
+
+      .guide-intro {
+        margin: 8px 0 20px;
+        text-align: center;
+        color: rgba(255,255,255,.62);
+        font-size: .88rem;
+        line-height: 1.45;
+      }
+
+      .guide-steps {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 16px;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 18px;
+        background: rgba(255,255,255,.045);
+        list-style: none;
+      }
+
+      .guide-step {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        align-items: center;
+        gap: 12px;
+        color: rgba(255,255,255,.82);
+        font-size: .9rem;
+        line-height: 1.42;
+      }
+
+      .guide-step strong {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border-radius: 50%;
+        color: #17100b;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        box-shadow: 0 7px 18px rgba(242,192,141,.22);
+      }
+
+      .guide-dismiss {
+        width: 100%;
+        min-height: 52px;
+        margin-top: 16px;
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 16px;
+        color: #24170d;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        box-shadow: 0 10px 28px rgba(242,192,141,.17);
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
       :focus-visible {
         outline: 3px solid var(--gold-light);
         outline-offset: 4px;
@@ -377,7 +530,14 @@
       @media (prefers-reduced-motion: no-preference) {
         .primary-card { animation: arrive .7s .16s cubic-bezier(.2,.8,.2,1) both; }
         .telegram-card { animation: arrive .7s .28s cubic-bezier(.2,.8,.2,1) both; }
+        .browser-guide.is-open .guide-dialog { animation: guide-in .46s cubic-bezier(.2,.85,.22,1) both; }
+        .browser-guide.is-open .guide-pointer svg { animation: point-up 1.15s ease-in-out infinite; }
         @keyframes arrive { from { opacity: 0; transform: translateY(18px); } }
+        @keyframes guide-in { from { opacity: 0; transform: translateY(18px) scale(.975); } }
+        @keyframes point-up {
+          0%, 100% { transform: translateY(5px) rotate(1deg); }
+          50% { transform: translateY(-5px) rotate(-3deg); }
+        }
       }
     </style>
   </head>
@@ -443,5 +603,57 @@
         <footer><strong>Adults only · 18+</strong><br />By continuing, you confirm that you are of legal age.</footer>
       </section>
     </main>
+
+    <div class="browser-guide" id="browser-guide" aria-hidden="true">
+      <div class="guide-pointer" aria-hidden="true">
+        <span>Open here</span>
+        <svg viewBox="0 0 34 56" fill="none"><path d="M8 49c2-17 8-30 20-42M18 9l10-3 1 11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <section class="guide-dialog" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+        <button class="guide-close" type="button" aria-label="Close instructions" data-guide-close>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="guide-brand" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-8-4.4-8-10.5C4 6.8 8.7 5 12 8.5 15.3 5 20 6.8 20 10.5 20 16.6 12 21 12 21Z" fill="currentColor"/></svg>
+        </div>
+        <h2 id="guide-title">Open in your browser</h2>
+        <p class="guide-intro">For the smoothest experience, leave Instagram’s built-in browser.</p>
+        <ol class="guide-steps">
+          <li class="guide-step"><strong>1</strong><span>Tap the three dots <b>•••</b> in the top-right corner.</span></li>
+          <li class="guide-step"><strong>2</strong><span>Choose <b>Open in browser</b> or <b>Open in Safari</b>.</span></li>
+        </ol>
+        <button class="guide-dismiss" type="button" data-guide-close>Got it</button>
+      </section>
+    </div>
+
+    <script>
+      (() => {
+        const guide = document.getElementById('browser-guide');
+        const forcePreview = new URLSearchParams(window.location.search).get('popup') === '1';
+        const isInstagram = /Instagram/i.test(navigator.userAgent);
+        let alreadyShown = false;
+
+        try { alreadyShown = sessionStorage.getItem('browserGuideShown') === '1'; } catch (_) {}
+        if ((!isInstagram && !forcePreview) || (alreadyShown && !forcePreview)) return;
+
+        const closeGuide = () => {
+          guide.classList.remove('is-open');
+          guide.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          try { sessionStorage.setItem('browserGuideShown', '1'); } catch (_) {}
+        };
+
+        guide.querySelectorAll('[data-guide-close]').forEach((button) => button.addEventListener('click', closeGuide));
+        guide.addEventListener('click', (event) => { if (event.target === guide) closeGuide(); });
+        document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeGuide(); });
+
+        window.setTimeout(() => {
+          guide.classList.add('is-open');
+          guide.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          guide.querySelector('.guide-dismiss').focus({ preventScroll: true });
+        }, 5000);
+      })();
+    </script>
   </body>
 </html>
